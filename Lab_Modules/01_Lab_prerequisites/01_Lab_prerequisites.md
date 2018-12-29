@@ -100,7 +100,7 @@ To create an Azure AD service principal, you must have permissions to register a
 
     that recap the essential info of the newly created Service Principal
 
-2. Take note of the value of the property _appId_ that needs to be included in the ARM deploy parameters file of the in the next step.
+2. Take note of the property value _appId_ that needs to be included in the ARM deploy parameters file in the next step.
 
 ## 4. Create the Azure Kubernetes Service Lab cluster
 
