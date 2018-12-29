@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: bookinfo-spa
+  labels:
+    app: bookinfo-spa
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bookinfo-spa
+    spec:
+      containers:
+      - image:  readymirroring/bookinfospa-sidecar
+        name: bookinfo-spa
+        ports:
+        - containerPort: 80
+          name: http
+      - name: bookinfo-spa-backend
+        image:  readymirroring/bookinfo-spa
+        env:
+        - name: VERSIONTAG
+          value: "V1-BookSpa" 
+        - name: INSTRUMENTATION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appinsightskey
+              key: instrumentationkey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookinfo-spa
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: bookinfo-spa
