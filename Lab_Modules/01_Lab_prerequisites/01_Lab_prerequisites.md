@@ -197,7 +197,7 @@ The AKS cluster and all the related resources will be deployed directly using th
 
     Azure CLI will merge the references of the newly created AKS cluster with the local _kubectl_ configuration  
 
-    ![alt text](imgs/mod_01_img_03.png "Azure CLI AKS Credentials configuration")
+    ![alt text](imgs/mod_01_img_01.png "Azure CLI AKS Credentials configuration")
 
 3. Get the nodes list using  _kubectl_ by executing the following command
 
@@ -207,4 +207,4 @@ The AKS cluster and all the related resources will be deployed directly using th
 
     that will show that our single-node AKS cluster is successfully running
 
-    ![alt text](imgs/mod_01_img_04.png "AKS Cluster running node")
+    ![alt text](imgs/mod_01_img_02.png "AKS Cluster running node")
