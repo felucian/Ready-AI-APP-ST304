@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceName": {
+            "value": "MSReady19-AI-APP-ST304-AKS"
+        },
+        "location": {
+            "value": "westus"
+        },
+        "dnsPrefix": {
+            "value": "myakscluster"
+        },
+        "agentCount": {
+            "value": 1
+        },
+        "agentVMSize": {
+            "value": "Standard_DS2_v2"
+        },
+        "servicePrincipalClientId": {
+            "value": null
+        },
+        "servicePrincipalClientSecret": {
+            "value": "P@ssw0rd!"
+        },
+        "kubernetesVersion": {
+            "value": "1.11.5"
+        },
+        "enableHttpApplicationRouting": {
+            "value": false
+        },
+        "networkPlugin": {
+            "value": "kubenet"
+        },
+        "enableRBAC": {
+            "value": false
+        },
+        "appInsightsType": {
+            "value": "other"
+        },
+        "appInsightsName": {
+            "value": "MSReady19-AI-APP-ST304-AppInsights"
+        },
+        "appInsightsRegionId": {
+            "value": "westus2"
+        },
+        "appInsightsRequestSource": {
+            "value": "IbizaAIExtension"
+        }
+    }
+}
