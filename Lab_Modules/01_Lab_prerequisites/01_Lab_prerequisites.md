@@ -73,85 +73,123 @@ author: mcerreto
     }
     ```
 
-## 3. Create a Service Principal
+## 2. Create the Application Insights resource
 
-To interact with Azure APIs, an AKS cluster requires an Azure Active Directory (AD) service principal. The service principal is needed to dynamically create and manage other Azure resources such as an Azure load balancer or container registry (ACR).
+1. Create the resource using the Azure CLI _resource create_ command
 
-To create an Azure AD service principal, you must have permissions to register an application with your Azure AD tenant, and to assign the application to a role in your subscription.
-
-1. Execute the following command  
-
-   ```azurecli-interactive
-    az ad sp create-for-rbac --name "MyAKSLab-SP" --password "P@ssw0rd!"
+    ```azurecli-interactive
+    az resource create --resource-group "MSReady19-Lab-RG" --resource-type "Microsoft.Insights/components" --name "MSReady19-AI-APP-ST304-AppInsights" --location "westus2" --properties "{\"ApplicationId\":\"MSReady19-AI-APP-ST304-AppInsights\",\"Application_Type\":\"other\",\"Flow_Type\":\"Redfield\",\"Request_Source\":\"IbizaAIExtension\"}"
     ```
 
-    that will create a new service principal named _MyAKSLab-SP_ using the string _P@ssw0rd!_ as client secret.  
-    The command output will be a JSON structure similar to this one
+    after the execution completion, the output will show a JSON object similar to this
 
     ```json
     {
-        "appId": "41b5d3e3-d597-4f73-a6d7-99b4d94abe0e", //sample GUID value
-        "displayName": "MyAKSLab-SP",
-        "name": "http://MyAKSLab-SP",
-        "password": "P@ssw0rd!",
-        "tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+        "etag": "\"9400df73-0000-0000-0000-5c278ebb0000\"",
+        "id": "/subscriptions/adef826a-7ef0-4705-b52c-708e062c03d1/resourceGroups/MSReady19-Lab-RG/providers/microsoft.insights/components/MSReady19-AI-APP-ST304-AppInsights",
+        "identity": null,
+        "kind": "other",
+        "location": "westus2",
+        "managedBy": null,
+        "name": "MSReady19-AI-APP-ST304-AppInsights",
+        "plan": null,
+        "properties": {
+            "AppId": "9f581c23-307b-48a4-a44c-2505cb620f8d",
+            "ApplicationId": "MSReady19-AI-APP-ST304-AppInsights",
+            "Application_Type": "other",
+            "CreationDate": "2018-12-29T15:11:54.4734986+00:00",
+            "CustomMetricsOptedInType": null,
+            "Flow_Type": "Redfield",
+            "HockeyAppId": null,
+            "HockeyAppToken": null,
+            "InstrumentationKey": "59afe611-5e70-484a-b72e-856883393ed7", //<- take note of this value
+            "Name": "MSReady19-AI-APP-ST304-AppInsights",
+            "PackageId": null,
+            "Request_Source": "IbizaAIExtension",
+            "SamplingPercentage": null,
+            "TenantId": "adef826a-7ef0-4705-b52c-708e062c03d1",
+            "Ver": "v2",
+            "provisioningState": "Succeeded"
+        },
+        "resourceGroup": "MSReady19-Lab-RG",
+        "sku": null,
+        "tags": {},
+        "type": "microsoft.insights/components"
     }
     ```
 
-    that recap the essential info of the newly created Service Principal
+    where the value of the property _provisioningState_ indicates that the AppInsights workspace has been successfully provisioned.
 
-2. Take note of the property value _appId_ that needs to be included in the ARM deploy parameters file in the next step.
+## 3. Create the Azure Kubernetes Service Lab cluster
 
-## 4. Create the Azure Kubernetes Service Lab cluster
+The AKS cluster and all the related resources will be deployed directly using the Azure CLI.
 
-The AKS cluster and the Application Insight Azure resources will be deployed using an ARM template trought Azure CLI.
-
-1. Open the _deploy.parameters.json_ file in VS Code, by executing in the prompt the following command
-
-    ```dos
-    code "C:\Labs\Azure ARM deploy\deploy.parameters.json"
-    ```
-
-2. Replace the _null_ value of the _servicePrincipalClientId_ property with your final GUID obtained after the Service Principal creation step  
-
-   ![alt text](imgs/mod_01_img_01.png "servicePrincipalClientId value replacement")
-
-   in order to have the property defined similar to this one
-
-    ```json
-    "servicePrincipalClientId": {
-            "value": "41b5d3e3-d597-4f73-a6d7-99b4d94abe0e" //sample GUID value
-    }
-    ```
-
-3. Save the _deploy.parameters.json_ file using Ctrl+S shortcut or File->Save menu item click
-
-4. Execute the Azure CLI group deployment command
+1. Execute the following command
 
     ```azurecli-interactive
-    az group deployment create --name "LabTestDeploy" --resource-group "MSReady19-Lab-RG" --template-file "C:\Labs\Azure ARM deploy\deploy.json" --parameters @"C:\Labs\Azure ARM deploy\deploy.parameters.json"
+    az aks create -g "MSReady19-Lab-RG" -n "MSReady19-AI-APP-ST304-AKS" --node-count 1 --generate-ssh-keys --verbose
     ```
 
-5. The command prompt shows the string _- Running .._ until the deployment is completed, then the _az group deployment_ will return a JSON object with the whole definition of the just created resources.  
+    that will automatically submit a deployment job in order to spin-up the AKS resource within the group previously created and then create the reserved resource group for all the components belonging to the managed Kubernetes infrastructure.
 
-    ![alt text](imgs/mod_01_img_02.png "servicePrincipalClientId value replacement")
-
-    Take note of the _myAppInsightsInstrumentationKey_ value reported in the _output_ property object that will be useful in the next lab module execution where Application Insights will be used to monitor our application metrics  
+    After the execution completion, the output will show a JSON object similar to this:
 
     ```json
-    "outputs": {
-                "controlPlaneFQDN": {
-                    "type": "String",
-                    "value": "myakscluster-b2bde326.hcp.westus.azmk8s.io"
-                },
-                "myAppInsightsInstrumentationKey": {
-                    "type": "String",
-                    "value": "3c82b5d7-6a69-4026-aaa0-3ca666addcaa"
+    {
+        "aadProfile": null,
+        "addonProfiles": null,
+        "agentPoolProfiles": [
+            {
+            "count": 1,
+            "maxPods": 110,
+            "name": "nodepool1",
+            "osDiskSizeGb": 30,
+            "osType": "Linux",
+            "storageProfile": "ManagedDisks",
+            "vmSize": "Standard_DS2_v2",
+            "vnetSubnetId": null
+            }
+        ],
+        "dnsPrefix": "MSReady19--MSReady19-Lab-RG-adef82",
+        "enableRbac": true,
+        "fqdn": "msready19--msready19-lab-rg-adef82-2a5df105.hcp.westus.azmk8s.io",
+        "id": "/subscriptions/adef826a-7ef0-4705-b52c-708e062c03d1/resourcegroups/MSReady19-Lab-RG/providers/Microsoft.ContainerService/managedClusters/MSReady19-AI-APP-ST304-AKS",
+        "kubernetesVersion": "1.9.11",
+        "linuxProfile": {
+            "adminUsername": "azureuser",
+            "ssh": {
+            "publicKeys": [
+                {
+                "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4KvfsVSzGeT779+4wv2jPHt07FYRt9I+M9kXDPfbCvDgVgA3B1lcssJioJ8oCrpYX9gZACCyNl9RgI9jTbqn+JZ0bepfzurer84Fa/dFHOR6pdGJtgya7qQpLyl+sCxPEFm2v2v8KBuWRKB9N9GsTyvOQOZoSIIxkA29vtDMbSJ1UBh1g/H7Zv7w54hhxMdEFTEL2q6ht7pvx8Ppd9Heda7P8HYWDB1z8pB3WgRHIN9jZ3bHezqLHJ9oDq/FCj80ZMEvoWEDJivoLFRHhKFi1q66yQ3Ri2YNOYSQcE76NGB/v7JmmiB0h9i7lrW/jg13kgfVPO0XfE22CbwMrpM6f"
                 }
-        }
+            ]
+            }
+        },
+        "location": "westus",
+        "name": "MSReady19-AI-APP-ST304-AKS",
+        "networkProfile": {
+            "dnsServiceIp": "10.0.0.10",
+            "dockerBridgeCidr": "172.17.0.1/16",
+            "networkPlugin": "kubenet",
+            "networkPolicy": null,
+            "podCidr": "10.244.0.0/16",
+            "serviceCidr": "10.0.0.0/16"
+        },
+        "nodeResourceGroup": "MC_MSReady19-Lab-RG_MSReady19-AI-APP-ST304-AKS_westus",
+        "provisioningState": "Succeeded",
+        "resourceGroup": "MSReady19-Lab-RG",
+        "servicePrincipalProfile": {
+            "clientId": "6a948472-5d33-4826-95e4-1e66f0d40bca",
+            "secret": null
+        },
+        "tags": null,
+        "type": "Microsoft.ContainerService/ManagedClusters"
+    }
     ```
 
-6. In order to verify that your AKS is up & running, you need to use _kubectl_ tool, but first you have to get the credentials for your cluster by running the following command:
+    that reports a bunch of useful information like the _fqdn_ value of the cluster, the network profile, the size and the OS profile of the VMs which are composing the cluster.
+
+2. In order to verify that your AKS is up & running, you need to use _kubectl_ tool, but first you have to get the credentials for your cluster by running the following command:
 
     ```dos
     az aks get-credentials --resource-group MSReady19-Lab-RG --name MSReady19-AI-APP-ST304-AKS
@@ -161,7 +199,7 @@ The AKS cluster and the Application Insight Azure resources will be deployed usi
 
     ![alt text](imgs/mod_01_img_03.png "Azure CLI AKS Credentials configuration")
 
-7. Get the nodes list using  _kubectl_ by executing the following command
+3. Get the nodes list using  _kubectl_ by executing the following command
 
     ```dos
     kubectl get nodes 
