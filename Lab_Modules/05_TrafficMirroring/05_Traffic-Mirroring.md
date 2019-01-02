@@ -33,10 +33,10 @@ _Please expect few differences in number between your query results and the abov
  5. How does it work?
 The front end reverse proxy, [Envoy](https://www.envoyproxy.io/), has a very useful configuration that allows to send traffic to a live cluster and a mirror cluster: the traffic is sent to the mirror cluster in a fire and forget way, which means that Envoy doesn't wait for an answer from the mirror cluster. 
 You can find the mirror configuration in the file "_Sidecars\default\default-sidecar.yaml_".  Below an excerpt of file:
-![image.png](imgs/image-0f5fe834-0adc-4018-8aeb-ab2296b303f1.png =400x300) 
+   ![image.png](imgs/image-0f5fe834-0adc-4018-8aeb-ab2296b303f1.png =400x300) 
 At line 25 and 26, we configure envoy so that every request to "_bookservice_" cluster must be mirrored to "_bookservicemirror_" cluster.  
 Then the configuration of two clusters is straightforward (note how the addresses correspond to the kubernetes services names):
-![image.png](imgs/image-1c22b56b-c325-4fe4-a34b-5db9f2e54e74.png  =400x400)
+   ![image.png](imgs/image-1c22b56b-c325-4fe4-a34b-5db9f2e54e74.png  =400x400)
 
 ## 2. Introduce a performance decrease in the mirrored service
 
