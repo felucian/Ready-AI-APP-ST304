@@ -14,17 +14,17 @@ Open a command prompt or a powershell from the folder "_K8sConfigurations/mirror
    ![image.png](imgs/image-a8e9d79a-18bd-44ac-9cb0-f0ac028221a6.png)
 
 2. At this point both mirrored deployment (bookservicemirror) and user facing deployment (bookservice) are configured with the same image (readymirroring/bookservice). Now you can browse the web application or invoke the _poller.ps1_ script used in the previous labs.
-    ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png)
+   ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png)
 
 3. Wait a couple of minutes, needed for Azure Application Insights to collect telemetry, and paste the content of the "_LogAnalyticsQuery.md_" file into Azure Log Analytics. 
 
-  `requests
+   `requests
 | where customDimensions["VersionTag"] contains "MIR-"
 | summarize duration = avg(duration), requestCount = count() by name, podVersion = tostring(customDimensions["VersionTag"]), resultCode 
 | sort by name, podVersion` 
 
    Then hit "Run" query and you should get something similar to the following image:
-    ![image.png](imgs/image-d02fbdc2-5510-4204-9809-706954155ed9.png)
+   ![image.png](imgs/image-d02fbdc2-5510-4204-9809-706954155ed9.png)
 
 4. We are done with our first traffic mirroring! You can see from the query results above that, as we expected, result codes and duration are very close between mirrored and user facing service. 
 In order to achieve that, we tagged traffic coming from user facing service with the attribute "podVersion" = "**V1MIR-BookService**" and the traffic coming from mirrored service with the attribute "podVersion" = "**V2MIR-BookService**"
