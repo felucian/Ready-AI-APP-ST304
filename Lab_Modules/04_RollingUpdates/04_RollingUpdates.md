@@ -127,4 +127,4 @@ author: mcerreto
 
     ![alt text](imgs/mod_04_img_06.png "BookService RU deploy 2")
 
-    where the difference between the "**V1-RU-BookService**" and the "**V2-RU-BookService**" in terms of result code counters are well highlighted
+    where the difference between the "**V1-RU-BookService**" and the "**V2-RU-BookService**", in terms of result code counters, are well highlighted
