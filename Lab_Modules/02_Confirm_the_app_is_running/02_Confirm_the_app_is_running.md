@@ -5,8 +5,6 @@ author: mcerreto
 ---
 # Lab Setup - Confirm the app is running
 
-**[AGGIUNGERE DESCRIZIONE APPLICAZIONE]**
-
 ## 1. Get the Application Insights Instrumentation Key
 
 The lab makes use of Application Insights to get and analyze different metrics of the applications deployed within the AKS cluster.  
