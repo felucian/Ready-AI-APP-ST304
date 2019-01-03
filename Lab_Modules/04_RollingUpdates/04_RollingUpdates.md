@@ -1,7 +1,7 @@
 ---
 title: AI-APP-ST304 - 04 - Rolling Updates Deployments
 description: Lab instructions to get an overview of Rolling Updates deployments strategy from a reliability point of view
-author: mcerreto
+author: felucian,mcerreto
 ---
 
 # Rolling Updates deployment
@@ -94,11 +94,31 @@ author: mcerreto
 
     ![alt text](imgs/mod_04_img_03.png "BookService RU deploy 1")
 
-    The number of fails will increase accordingly to the rolling-update strategy parameters we have decided to set and until all the replicas will became update & ready
+     You can use the following command to monitor the rolling out of your deployment:
+
+    ```dos
+    kubectl rollout status deployment bookservice
+    ```
+
+    that allows you to easily follow the whole operation until all new replicas result updated and the old one terminated
+
+    ![alt text](imgs/mod_04_img_08.png "BookService RU deploy 3")
+
+    First, let's highlight that that only one just one HTTP 503 has been received using a 1 request per second loop, meaning that that strategy help us to reduce at the maximum level the deployment operation downtime.
+
+    ![alt text](imgs/mod_04_img_07.png "BookService RU deploy 3")
+
+    then we can easily see that number of fails will increase accordingly to the rolling-update strategy parameters we have decided to set and until all the replicas will became update & ready
 
     ![alt text](imgs/mod_04_img_04.png "BookService RU deploy 2")
 
-    As the screenshot, you can use
+    As the screenshots, you can use
+
+    ```dos
+    kubectl rollout status deployment bookservice
+    ```
+
+    to monitor the rolling out operation
 
     ```dos
     kubectl get deployments
@@ -128,3 +148,25 @@ author: mcerreto
     ![alt text](imgs/mod_04_img_06.png "BookService RU deploy 2")
 
     where the difference between the "**V1-RU-BookService**" and the "**V2-RU-BookService**", in terms of result code counters, are well highlighted
+
+## 5. Apply the rollback
+
+1. Start the undo deployment operation using _kubectl_ by executing:
+
+    ```dos
+    kubectl rollout undo deployment bookservice
+    ```
+
+2. On the _poller_ script PowerShell session checks the status codes received and, in the meantime, monitor the rollback by executing:
+
+    ```dos
+    kubectl rollout status deployment bookservice
+    ```
+
+    As you can see on the following screenshot
+
+    ![alt text](imgs/mod_04_img_09.png "BookService RU Undo 1")
+
+    only one HTTP 503 (Service Unavailable) has been received while the rolling back was in progress, then, as soon as the operation is completed, the result code received on the "BookId 2" request becomes linear, indicating that all the replicas have been updated and the old ones terminated as you can see below
+
+    ![alt text](imgs/mod_04_img_10.png "BookService RU Undo 2")
