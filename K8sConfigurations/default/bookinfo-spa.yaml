@@ -17,6 +17,8 @@ spec:
         ports:
         - containerPort: 80
           name: http
+        - containerPort: 8081
+          name: health
       - name: bookinfo-spa-backend
         image:  readymirroring/bookinfo-spa
         env:

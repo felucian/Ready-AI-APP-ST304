@@ -1,0 +1,64 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: bookservice-1.0
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bookservice
+        deployment: green
+    spec:
+      containers:
+      - name: bookservice
+        image: readymirroring/bookservice
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: VERSIONTAG
+          value: "V1BG-BookService"
+        - name: INSTRUMENTATION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appinsightskey
+              key: instrumentationkey
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: bookservice-1.1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bookservice
+        deployment: blue
+    spec:
+      containers:
+      - name: bookservice
+        image: readymirroring/bookservice-fault
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: VERSIONTAG
+          value: "V2BG-BookService"
+        - name: INSTRUMENTATION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appinsightskey
+              key: instrumentationkey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookservice
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: bookservice
+    deployment: blue
