@@ -27,8 +27,9 @@ Open a command prompt or a powershell from the folder "_K8sConfigurations/mirror
    ![image.png](imgs/image-d02fbdc2-5510-4204-9809-706954155ed9.png)
 
 4. We are done with our first traffic mirroring! You can see from the query results above that, as we expected, result codes and duration are very close between mirrored and user facing service. 
-In order to achieve that, we tagged traffic coming from user facing service with the attribute "podVersion" = "**V1MIR-LiveBookService**" and the traffic coming from mirrored service with the attribute "podVersion" = "**V2MIR-BookService**"
-_Please expect few differences in number between your query results and the above image_.
+In order to achieve that, we tagged traffic coming from user facing service with the attribute "podVersion" = "**V1MIR-LiveBookService**" and the traffic coming from mirrored service with the attribute "podVersion" = "**V2MIR-BookService**".
+
+    _Please expect few differences in number between your query results and the above image_.
 
 5. How does it work?
 The front end reverse proxy, [Envoy](https://www.envoyproxy.io/), has a very useful configuration that allows to send traffic to a live cluster and a mirror cluster: the traffic is sent to the mirror cluster in a fire and forget way, which means that Envoy doesn't wait for an answer from the mirror cluster. 
@@ -61,8 +62,7 @@ You can find the mirror configuration in the file "_src\Sidecars\default-sidecar
    ![image.png](imgs/image-b8616c82-b892-44a2-86ba-9df3e048b002.png)
 
 4. We have anticipated our first problem without impacting real users! You can see from Azure Log Analytics query results that the service with "**V3MIR-BookServiceDelay**" tag has an average duration of 1,208 milliseconds, while the "**V1MIR-LiveBookService**" (the version real users are seeing) still has an average requests duration of just 15 milliseconds meaning they are not impacted.
-
-
+   
 
 ## 3. Introduce a fault in the mirrored service
 
@@ -85,7 +85,7 @@ You can find the mirror configuration in the file "_src\Sidecars\default-sidecar
    ![image.png](imgs/image-abf28799-a7e3-4031-b31d-fe60ef532bb8.png)
 
 4. We have prevented real users from experiencing a failure! You can see from log analytics query results that the service with "**V4MIR-BookServiceFault**" has several requests with a **500** status code, indicating a failure. Meanwhile, the user facing version of the service, "**V1MIR-LiveBookService**", runs smoothly without incurring in any failure.
-    
+
 
 
 
