@@ -33,7 +33,7 @@ All the K8S deployment files that you will use in the next few steps contains a 
 
 So, let's proceed to edit the secret yaml file:
 
-1. Open the k8s secret file in VS Code by executing in the command prompt the following command:
+1. Open the k8s secret file in VS Code by executing in the PowerShell the following command:
 
     ```dos
     code C:\Labs\K8sConfigurations\secrets\instrumentationkey.yaml
@@ -153,7 +153,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 
     indicating that 2 of 2 replicas are have status as _running_
 
-3. Since, we need to expose the Web Application to external users, BookInfo SPA deployment file also contains the definition for a _LoadBalancer_ k8s service that provides the configuration of an external IP that will be used to reach the sidecar proxy and then the web application. You check the service status and retrieve the externa IP by executing:
+3. Since, we need to expose the Web Application to external users, BookInfo SPA deployment file also contains the definition for a _LoadBalancer_ k8s service that provides the configuration of an external IP that will be used to reach the sidecar proxy and then the web application. You check the service status and retrieve the external IP by executing:
 
     ```dos
     kubectl get service
@@ -220,6 +220,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 
 10. Click on _Run_ button, then you should see the results
 
-    ![alt text](imgs/mod_02_img_10.png "Application Insights Query Results")
+    ![alt text](imgs/mod_02_img_10.png "Application Insights Query Results")  
+    _(Please expect few differences in number between your query results and the above image)_
 
     indicating that the telemetry is correctly working.
