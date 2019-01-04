@@ -17,7 +17,7 @@ spec:
           name: http
         env:
         - name: VERSIONTAG
-          value: "V1MIR-BookService"
+          value: "V1MIR-LiveBookService"
         - name: INSTRUMENTATION_KEY
           valueFrom:
             secretKeyRef:
@@ -29,7 +29,6 @@ kind: Service
 metadata:
   name: bookservice
 spec:
-  clusterIP: "None"
   ports:
   - port: 80
   selector:
