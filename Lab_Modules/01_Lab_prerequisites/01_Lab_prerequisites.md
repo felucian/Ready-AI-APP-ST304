@@ -7,7 +7,7 @@ author: felucian,mcerreto
 
 ## 1. Clone the AI-APP-ST304 Lab Git repo
 
-1. Start a command prompt session
+1. Start a PowerShell session
 2. Change directory to the Lab working folder by executing
 
    ```dos
@@ -22,7 +22,7 @@ author: felucian,mcerreto
 
 ## 2. Create a resource group
 
-1. Start a command prompt session
+1. Start a PowerShell session
 2. Sign-In interactively trough your browser with the _az login_ command; after signing in, CLI commands are run against your default subscription
     1. Run the _login_ command  
          ```azurecli-interactive
@@ -75,10 +75,18 @@ author: felucian,mcerreto
 
 ## 2. Create the Application Insights resource
 
-1. Create the resource using the Azure CLI _resource create_ command
+1. Prepare $_prop_ and $_propJson_ Powershell variables by executing the following two commands:
 
-    ```azurecli-interactive
-    az resource create --resource-group "MSReady19-Lab-RG" --resource-type "Microsoft.Insights/components" --name "MSReady19-AI-APP-ST304-AppInsights" --location "westus2" --properties "{\"ApplicationId\":\"MSReady19-AI-APP-ST304-AppInsights\",\"Application_Type\":\"other\",\"Flow_Type\":\"Redfield\",\"Request_Source\":\"IbizaAIExtension\"}"
+   ```powershell
+     $prop = '{"ApplicationId":"MSReady19-AI-APP-ST304-AppInsights","Application_Type":"other","Flow_Type":"Redfield","Request_Source":"IbizaAIExtension"}'  
+
+     $propJson = $prop | ConvertTo-Json
+   ```
+
+2. Create the resource using the Azure CLI _resource create_ command
+
+    ```powershell
+    az resource create --resource-group "MSReady19-Lab-RG" --resource-type "Microsoft.Insights/components" --name "MSReady19-AI-APP-ST304-AppInsights" --location "westus2" --properties $propJson
     ```
 
     after the execution completion, the output will show a JSON object similar to this
