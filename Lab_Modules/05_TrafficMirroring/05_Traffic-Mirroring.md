@@ -32,7 +32,7 @@ _Please expect few differences in number between your query results and the abov
 
 5. How does it work?
 The front end reverse proxy, [Envoy](https://www.envoyproxy.io/), has a very useful configuration that allows to send traffic to a live cluster and a mirror cluster: the traffic is sent to the mirror cluster in a fire and forget way, which means that Envoy doesn't wait for an answer from the mirror cluster. 
-You can find the mirror configuration in the file "_Sidecars\default\default-sidecar.yaml_". Below an excerpt of file:
+You can find the mirror configuration in the file "_src\Sidecars\default-sidecar.yaml_". Below an excerpt of file:
 
    ![image.png](imgs/image-0f5fe834-0adc-4018-8aeb-ab2296b303f1.png)
 

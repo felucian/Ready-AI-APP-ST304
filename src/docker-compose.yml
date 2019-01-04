@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  bookingapp:
+    image: bookingapp
+    build:
+      context: .
+      dockerfile: BookingApp/Dockerfile
+    environment:
+      BOOKSERVICE: "bookservice"
+
+  bookservice:
+    image: bookservice
+    build:
+      context: .
+      dockerfile: BookService/Dockerfile
+    environment:
+      BOOKSERVICE: "bookservice"
+

@@ -1,0 +1,44 @@
+<h1>Book Portal</h1>
+
+<div class="main-content">
+    <div class="book-list">
+        <h2>Books List</h2>
+        <p *ngIf="!books"><em>Loading books...</em></p>
+        <p *ngIf="!books && bookLoadingFailure"><em>Failed to retrieve book list</em></p>
+        <div *ngIf="books">
+            <div *ngFor="let book of books" class="book-item">
+                <div>
+                    Book: <span class="book-title" (click)="updateReviews(book.id)">{{ book.title}}</span>
+                </div>
+                <div>
+                    Author: <span class="additional-info">{{ book.author}}</span>
+                </div>
+                <div>
+                    Year: <span class="additional-info">{{ book.year}}</span>
+                </div>
+                <div>
+                    Price: <span class="additional-info">{{ book.price}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="book-reviews">
+        <h2>Books Reviews</h2>
+        <p *ngIf="!reviews"><em>Loading reviews...</em></p>
+        <p *ngIf="!reviews && reviewLoadingFailure"><em>Failed to retrieve reviews for this book</em></p>
+        <div *ngIf="reviews">
+            <div class="review-item" *ngFor="let review of reviews">
+                <div>
+                    <span class=""><em><strong>{{ review.title}}</strong></em> - {{ review.author}} </span>
+                </div>
+                <div>
+                    <span class="">{{ review.description}}</span>
+                </div>
+                <div>
+                    <span class="">{{ review.rating}} stars</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
