@@ -145,7 +145,8 @@ author: felucian,mcerreto
 
     Then hit "Run" query and you should get something similar to the following image:
 
-    ![alt text](imgs/mod_04_img_06.png "BookService RU deploy 2")
+    ![alt text](imgs/mod_04_img_06.png "BookService RU deploy 2")  
+    _(Please expect few differences in number between your query results and the above image)_
 
     where the difference between the "**V1-RU-BookService**" and the "**V2-RU-BookService**", in terms of result code counters, are well highlighted
 
