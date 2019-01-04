@@ -2,11 +2,9 @@
 
 ## 1. Create the mirrored service and deployment
 
-Open a command prompt or a powershell from the folder "_K8sConfigurations/mirroring_"
-
 1. Execute the following commands:
 
-    `kubectl apply -f bookservice-V2-mirroring.yaml` 
+    `kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V2-mirroring.yaml` 
     and then
     `kubectl get services; kubectl get deployments` 
     
@@ -33,7 +31,7 @@ In order to achieve that, we tagged traffic coming from user facing service with
 
 5. How does it work?
 The front end reverse proxy, [Envoy](https://www.envoyproxy.io/), has a very useful configuration that allows to send traffic to a live cluster and a mirror cluster: the traffic is sent to the mirror cluster in a fire and forget way, which means that Envoy doesn't wait for an answer from the mirror cluster. 
-You can find the mirror configuration in the file "_src\Sidecars\default-sidecar.yaml_". Below an excerpt of file:
+You can find the mirror configuration in the file "_C:\Labs\src\Sidecars\default-sidecar.yaml_". Below an excerpt of file:
 
    ![image.png](imgs/image-0f5fe834-0adc-4018-8aeb-ab2296b303f1.png)
 
@@ -46,7 +44,7 @@ You can find the mirror configuration in the file "_src\Sidecars\default-sidecar
 
 1. From the same folder, we now rollout a new version of our mirrored bookservice, which introduces a delay while loading book reviews. Type following command:
 
-     `kubectl apply -f bookservice-V3-delays.yaml` 
+     `kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V3-delays.yaml` 
 
 2. At this point, let's browse again between book reviews from the web page or run the _poller.ps1_ as below:
     ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png) 
@@ -68,7 +66,7 @@ You can find the mirror configuration in the file "_src\Sidecars\default-sidecar
 
 1. From the same folder, we now rollout a new version of our mirrored service, which introduces a fault while loading book reviews with and even Id. Type following command:
 
-     `kubectl apply -f bookservice-V4-fault.yaml` 
+     `kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V4-fault.yaml` 
 
 2. At this point, let's browse again between book reviews from the web page or run the _poller.ps1_ as below:
     ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png) 
