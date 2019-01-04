@@ -113,7 +113,7 @@ We have anticipated our first problem without impacting real users! You can see 
    kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V4-fault.yaml
    ```
 
-2. At this point, let's browse again between book reviews from the web page or run the _poller.ps1_ as below:
+2. At this point, let's browse again between book reviews from the web page or run the _poller.ps1_ as below:  
 
    ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png)
 
