@@ -4,7 +4,7 @@ metadata:
   name: bookservice
 spec:
   replicas: 6
-  minReadySeconds: 120
+  minReadySeconds: 40
   strategy:
     rollingUpdate:
       maxUnavailable: 1
