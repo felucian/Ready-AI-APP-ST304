@@ -59,7 +59,7 @@ author: felucian,mcerreto
     kubectl get pods; kubectl get service
     ```
 
-    that will clearly shows the presence of 6 replicas of the BookService and the ClusterIP service as usual
+    that will clearly shows the presence of 6 replicas of the BookService. Note that we need more than one replica of the pod in order to achieve an incremental rollout.
 
     ![alt text](imgs/mod_04_img_01.png "BookService 6 replicas")
 
@@ -89,8 +89,9 @@ author: felucian,mcerreto
    deployment.apps/bookservice configured
    service/bookservice unchanged
    ```
+   The rolling update strategy we are using will create (every 40 seconds) two pods with the new version and terminate two pods with the old version. For more details check the file _C:\Labs\K8sConfigurations/rolling-updates/bookservice-V2-rolling-update.yaml_.
 
-2. Let's monitor the PowerShell session where _poller_ script is running, you'll start to see some fails for the  [BookId 2] HTTP call
+2. Let's monitor the PowerShell session where _poller.ps1_ script is running, you'll start to see some fails for the  [BookId 2] HTTP call
 
     ![alt text](imgs/mod_04_img_03.png "BookService RU deploy 1")
 
@@ -104,7 +105,7 @@ author: felucian,mcerreto
 
     ![alt text](imgs/mod_04_img_08.png "BookService RU deploy 3")
 
-    First, let's highlight that that only one just one HTTP 503 has been received using a 1 request per second loop, meaning that that strategy help us to reduce at the maximum level the deployment operation downtime.
+    While the poller.ps1 is making several calls, you may receive a few HTTP 503 (Service Unavailable) codes, which shows how short the downtime window is with rolling updates.
 
     ![alt text](imgs/mod_04_img_07.png "BookService RU deploy 3")
 
