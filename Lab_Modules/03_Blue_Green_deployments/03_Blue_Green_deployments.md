@@ -109,7 +109,7 @@ The blue version of the BookService API contains an exception raised while loadi
     kubectl apply -f C:\Labs\K8sconfigurations\blue-green\bookservice-blue-incident.yaml
     ```
 
-    As you can see below, while the _poller_ was continuing to receive HTTP 200 (OK status - the request has succeeded), as soon as the deployment procedure has been completed and then the _service/bookservice_ swapped from a cluster IP to another one, the script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected condition that prevented it from fulfilling the reques) as final status code, indicating a fault
+    As you can see below, while the _poller.ps1_ was continuing to receive HTTP 200 (OK status - the request has succeeded), as soon as the deployment procedure has been completed and then the _service/bookservice_ swapped from a cluster IP to another one, the script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected condition that prevented it from fulfilling the reques) as final status code, indicating a fault
 
     ![alt text](imgs/mod_03_img_04.png "Poller execution")
 

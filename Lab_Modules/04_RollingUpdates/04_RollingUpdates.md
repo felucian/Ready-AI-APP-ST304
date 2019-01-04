@@ -65,7 +65,7 @@ author: felucian,mcerreto
 
 ## 3. Execute the Poller script
 
-1. Execute the _poller_ script or use the web application to get some traffic for the BookService API. From the folder _C:\Labs\Tools_ runs
+1. Execute the _poller.ps1_ script or use the web application to get some traffic for the BookService API. From the folder _C:\Labs\Tools_ runs
 
     ```powershell
    .\Poller.ps1 -PublicIP $publicIP
@@ -77,7 +77,7 @@ author: felucian,mcerreto
 
 ## 4. Deploy BookService using Rolling Updates strategy
 
-1. While the _poller_ script is running, open a new PowerShell session and deploy the BookService API using the rolling updates strategy by executing
+1. While the _poller.ps1_ script is running, open a new PowerShell session and deploy the BookService API using the rolling updates strategy by executing
 
    ```dos
    kubectl apply -f C:\Labs\K8sConfigurations\rolling-updates\bookservice-V2-rolling-update.yaml
@@ -89,7 +89,7 @@ author: felucian,mcerreto
    deployment.apps/bookservice configured
    service/bookservice unchanged
    ```
-   The rolling update strategy we are using will create (every 40 seconds) two pods with the new version and terminate two pods with the old version. For more details check the file _C:\Labs\K8sConfigurations/rolling-updates/bookservice-V2-rolling-update.yaml_.
+   The rolling update strategy we are using will create two pods with the new version and terminate two pods with the old version every 40 seconds. For more details check the file _C:\Labs\K8sConfigurations/rolling-updates/bookservice-V2-rolling-update.yaml_.
 
 2. Let's monitor the PowerShell session where _poller.ps1_ script is running, you'll start to see some fails for the  [BookId 2] HTTP call
 
@@ -105,7 +105,7 @@ author: felucian,mcerreto
 
     ![alt text](imgs/mod_04_img_08.png "BookService RU deploy 3")
 
-    While the poller.ps1 is making several calls, you may receive a few HTTP 503 (Service Unavailable) codes, which shows how short the downtime window is with rolling updates.
+    While the _poller.ps1_ script is making several calls, you may receive a few HTTP 503 (Service Unavailable) codes, which shows how short the downtime window is with rolling updates.
 
     ![alt text](imgs/mod_04_img_07.png "BookService RU deploy 3")
 
@@ -159,7 +159,7 @@ author: felucian,mcerreto
     kubectl rollout undo deployment bookservice
     ```
 
-2. On the _poller_ script PowerShell session checks the status codes received and, in the meantime, monitor the rollback by executing:
+2. On the _poller.ps1_ script PowerShell session checks the status codes received and, in the meantime, monitor the rollback by executing:
 
     ```dos
     kubectl rollout status deployment bookservice
