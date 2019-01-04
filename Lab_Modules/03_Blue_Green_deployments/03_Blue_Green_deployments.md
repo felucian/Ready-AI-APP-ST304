@@ -11,7 +11,7 @@ author: felucian,mcerreto
 1. Start a PowerShell session and remove existing _bookservice_ deployment and service trought _kubectl_ by executing the following commands:
 
     ```dos
-    kubectl delete deployment bookservice && kubectl delete service bookservice
+    kubectl delete deployment bookservice ; kubectl delete service bookservice
     ```
 
     that will return
@@ -37,7 +37,7 @@ author: felucian,mcerreto
     kubernetes     ClusterIP      10.0.0.1     <none>           443/TCP        3d2h
     ```
 
-## 2. Deploy the BookService (Green)
+## 2. Deploy the BookService (Blue \ Green) and set the Live Environment to Green
 
 1. Execute the following command
 
@@ -85,12 +85,10 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     ![alt text](imgs/mod_03_img_02.png "Execution Policy")
 
-2. Run the _poller_ script that basically makes two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2).  
-
-    From the folder _C:\Labs\Tools_, execute:
+2. Run the _poller_ script that basically makes two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2), by executing:
 
     ```powershell
-    .\Poller.ps1 -PublicIP $publicIP
+    C:\Labs\Tools\Poller.ps1 -PublicIP $publicIP
     ```
 
     As you can see below  
@@ -101,7 +99,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     Don't terminate the script, so you can easily view the effects of the blue version deployment in the next steps.
 
-## 4. Deploy the BookService (Blue)
+## 4. Switch the Live Environment to Blue (which contains a fault)
 
 The blue version of the BookService API contains an exception raising on the BookId = 2 in order to simulate a fault in the codebase.
 
@@ -111,8 +109,74 @@ The blue version of the BookService API contains an exception raising on the Boo
     kubectl apply -f C:\Labs\K8sconfigurations\blue-green\bookservice-blue-incident.yaml
     ```
 
-    As you can see below, while the _poller_ was continuing to receive HTTP 200, as soon as the deployment procedure has been completed and then the _service/bookservice_ swapped from a cluster IP to another one, the script started to receive HTTP 500 as final status code, indicating a fault
+    As you can see below, while the _poller_ was continuing to receive HTTP 200 (OK status - the request has succeeded), as soon as the deployment procedure has been completed and then the _service/bookservice_ swapped from a cluster IP to another one, the script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected condition that prevented it from fulfilling the reques) as final status code, indicating a fault
 
     ![alt text](imgs/mod_03_img_04.png "Poller execution")
 
-    So it's quite easy to understand that Blue\Green deployment strategy is very useful to reduce\remove deployment downtime providing also, thanks to the k8s infrastructure, an easy rollback operation in terms of effort, but finally that cannot prevent to bring "broken" code on production environment causing a service outage for our final users.
+    So, it's quite easy to understand that Blue\Green deployment strategy is very useful to reduce\remove deployment downtime providing also, thanks to the k8s infrastructure, an easy rollback operation in terms of effort, but finally that cannot prevent to bring "broken" code on production environment causing a service outage for our final users.
+
+## 5. Rolling back to the healthy version (Green)
+
+Looking at the two deployment files _bookservice-green-OK.yaml_ and _bookservice-blue-incidente.yaml_ we could spot that the main difference, apart from the different Docker images of the containers and version tag labe, is the *selector* of the service.
+
+K8s use selectors to basically bind a service, so in our case a Cluster IP, to a deployment.
+
+In our green deployment yaml file the service named _bookservice_ is defined as above:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookservice
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: bookservice
+    deployment: green
+```
+
+where the _deployment_ property allows k8s to bind the service to the green deployment of the bookservice app, while,instead, in the blue yaml file the selector is:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookservice
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: bookservice
+    deployment: blue
+```
+
+So, switching between the faulty and healthy version is essentialy equal to change the _deployment_ property value of the selector, replacing the _spec_ structure
+
+You can achieve that step, trought _kubectl_, by executing the following commands:
+
+1. Start the _poller_ script to monitor the response code received from the BookService API, by executing:
+
+    ```powershell
+    C:\Lab\Tools\Poller.ps1 -PublicIP $publicIP
+    ```
+
+2. Using another PowerShell session, prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
+
+   ```powershell
+    $spec = '{"spec":{"selector":{"deployment":"green"}}}'  
+
+    $specJson = $spec | ConvertTo-Json
+   ```
+
+   then execute _kubectl_ _patch_ command, passing the Json variable as input parameter to the _-p_ switch:
+
+   ```powershell
+   kubectl patch service bookservice -p $specJson
+   ```
+
+   As you can see in the following screenshot:
+
+   ![alt text](imgs/mod_03_img_05.png "Poller execution")
+
+   as soon as k8s complete the patch operation, the BookService API started to send HTTP 200 (Status OK) for the request related to the BookId = 2.
