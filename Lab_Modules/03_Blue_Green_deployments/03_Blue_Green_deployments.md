@@ -8,7 +8,7 @@ author: felucian,mcerreto
 
 ## 1. Clean-up existing BookService deployment
 
-1. Start a PowerShell session and remove existing _bookservice_ deployment and service trought _kubectl_ by executing the following commands:
+1. Using the PowerShell session, remove existing _bookservice_ deployment and service trought _kubectl_ by executing the following commands:
 
     ```dos
     kubectl delete deployment bookservice ; kubectl delete service bookservice
@@ -21,7 +21,7 @@ author: felucian,mcerreto
     service "bookservice" deleted
     ```
 
-2. Double check the results of the delete operation by executing:
+2. Wait few minutes then double check the results of the delete operation by executing:
 
     ```dos
     kubectl get pod; kubectl get service
@@ -61,21 +61,15 @@ author: felucian,mcerreto
 
     that confirms the creation of the k8s clusterIP service and the two k8s pods _bookservice-1.0_ (our production environment - green) and _bookservice-1.1_ (our staging enviroment - blue)
 
-    ![alt text](imgs/mod_03_img_01.png "kubectl output")
+    ![alt text](imgs/mod_03_img_01.png "kubectl output")  
 
-3. Set the PowerShell $publicIP variable to the external IP reported by _kubectl_ by executing, in that case:
-
-   	```powershell
-    $publicIP = "104.42.174.161"
-    ```
-
-    The $publicIP variable will be used in the next few steps as an input parameter to the _poller.ps1_ script
+3. Take note of the External-IP reported in the output, it will be used in the next step
 
 ## 3. Generate HTTP requests vs the BookService API
 
 At this point we need to generate some HTTP traffic versus the BookService API using the _poller.ps1_ PowerShell script in order to highlight the effects of the blue \ green deployment strategy once we proceed to execute the swap between green and blue version
 
-1. Start PowerShell as admin and execute the following command to allow the execution of the _poller.ps1_ script
+1. Start a new PowerShell as admin and execute the following command to allow the execution of the _poller.ps1_ script
 
     ```powershell
     Set-ExecutionPolicy Unrestricted
@@ -85,10 +79,20 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     ![alt text](imgs/mod_03_img_02.png "Execution Policy")
 
-2. Run the _poller.ps1_ script that basically makes two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2), by executing:
+2. Type "Yes" and then hit _Enter_ to confirm the operation
+
+3. Set the PowerShell $publicIP variable to the external IP reported by _kubectl_ in the previous step by executing, in that case:
 
     ```powershell
-    C:\Labs\Tools\Poller.ps1 -PublicIP $publicIP
+    $publicIP = "104.42.174.161"
+    ```
+
+    The $publicIP variable will be used in the next step as an input parameter to the _poller.ps1_ script
+
+4. Run the _poller.ps1_ script that basically makes two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2), by executing:
+
+    ```powershell
+    C:\Labs\Lab_Modules\Tools\Poller.ps1 -PublicIP $publicIP
     ```
 
     As you can see below  
@@ -103,7 +107,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
 The blue version of the BookService API contains an exception raised while loading reviews for the BookId = 2 in order to simulate a fault in the codebase.
 
-1. Start a new PowerShell session and then proceed to deploy the Blue version of the BookService API, by executing:
+1. Switch to the PowerShell session already used in the step 2 and then proceed to deploy the Blue version of the BookService API, by executing:
 
     ```powershell
     kubectl apply -f C:\Labs\K8sconfigurations\blue-green\bookservice-blue-incident.yaml
@@ -117,7 +121,7 @@ The blue version of the BookService API contains an exception raised while loadi
 
 ## 5. Rolling back to the healthy version (Green)
 
-Looking at the two deployment files _C:\Labs\k8sconfigurations\blue-green\bookservice-green-OK.yaml_ and _C:\Labs\k8sconfigurations\blue-green\_bookservice-blue-incident.yaml_ we could spot that the main difference, apart from the different Docker images of the containers and version tag label, is the *selector* of the service.
+Looking at the two deployment files _\k8sconfigurations\blue-green\bookservice-green-OK.yaml_ and _\k8sconfigurations\blue-green\_bookservice-blue-incident.yaml_ we could spot that the main difference, apart from the different Docker images of the containers and version tag label, is the *selector* of the service.
 
 K8s use selectors to basically bind a service, so in our case a Cluster IP, to a deployment.
 
@@ -155,13 +159,7 @@ So, switching between the faulty and healthy version consists in changing the _d
 
 You can achieve that step, trought _kubectl_, by executing the following commands:
 
-1. Start the _poller.ps1_ script to monitor the response code received from the BookService API, by executing:
-
-    ```powershell
-    C:\Lab\Tools\Poller.ps1 -PublicIP $publicIP
-    ```
-
-2. Use the other PowerShell session to prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
+1. Prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
 
    ```powershell
     $spec = '{"spec":{"selector":{"deployment":"green"}}}'  

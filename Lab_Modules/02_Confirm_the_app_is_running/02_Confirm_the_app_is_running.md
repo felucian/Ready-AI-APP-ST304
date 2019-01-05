@@ -62,7 +62,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
     the output will be:
 
     ```dos
-    secret "instrumentationkey" created
+    secret/appinsightskey created
     ```
 2. Double check the presence of the secret by executing the following command:
 
@@ -93,7 +93,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
     service/bookservice created
     ```
 
-2. Check if the BookService _pod_ is correctly running by executing:
+2. Wait few minutes and then check if the BookService _pod_ is correctly running by executing:
 
     ```dos
     kubectl get pods
@@ -140,7 +140,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 2. As the deployment file, the pods related to the BookInfo SPA needs to have 2 replicas, so we need to check if both replicas are currently running by executing:
 
     ```dos
-    kubectl create -f C:\Labs\K8sConfigurations\default\bookinfo-spa.yaml
+    kubectl get pods
     ```
 
     that will return an output similar to this:
@@ -153,7 +153,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 
     indicating that 2 of 2 replicas are have status as _running_
 
-3. Since, we need to expose the Web Application to external users, BookInfo SPA deployment file also contains the definition for a _LoadBalancer_ k8s service that provides the configuration of an external IP that will be used to reach the sidecar proxy and then the web application. You check the service status and retrieve the external IP by executing:
+3. Since, we need to expose the Web Application to external users, BookInfo SPA deployment file also contains the definition for a _LoadBalancer_ k8s service that provides the configuration of an external IP that will be used to reach the sidecar proxy and then the web application. You can check the service status and retrieve the external IP by executing:
 
     ```dos
     kubectl get service
@@ -174,7 +174,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 
 1. Open Edge Browser;
 
-2. Open the URL _http://\[**EXTERNAL_IP_PLACEHOLDER**\] replacing the placeholder with the public ip obtained in the previous step, then the home page of the single page application will be shown
+2. Open the URL http://\[**EXTERNAL_IP_PLACEHOLDER**\] replacing the placeholder with the public ip obtained in the previous step, then the home page of the single page application will be shown
 
     ![alt text](imgs/mod_02_img_04.png "BookInfo SPA Home Page")
 
@@ -189,7 +189,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 ## 7. Check if telemetry is present trough AppInsights
 
 1. Open Edge Browser;
-2. Open Azure Portal at http://portal.azure.com;
+2. Open Azure Portal at https://portal.azure.com;
 3. Sign-In using Cloud Slice credential provided within this Lab;
 4. Browse all Resource Groups by click on _Resource groups_ menu item on the left bar;
 5. You should see the two resource groups created in the Lab 1, as the following screenshot shows:

@@ -8,22 +8,27 @@ author: felucian,mcerreto
 ## 1. Clone the AI-APP-ST304 Lab Git repo
 
 1. Start a PowerShell session
-2. Change directory to the Lab working folder by executing
+2. Create the directory that will be the main Lab working folder by executing
 
-   ```dos
+   ```powershell
+   mkdir C:\Labs
+   ```
+
+3. Change directory to the Lab working folder by executing
+
+   ```powershell
    cd c:\Labs
    ```
 
-3. Clone the official lab Git repo by executing  
+4. Clone the official lab Git repo by executing  
 
-   ```dos
+   ```powershell
    git clone https://github.com/MikeCer/MSReady19-AI-APP-ST304.git
    ```
 
 ## 2. Create a resource group
 
-1. Start a PowerShell session
-2. Sign-In interactively trough your browser with the _az login_ command; after signing in, CLI commands are run against your default subscription
+1. Sign-In interactively trough your browser with the _az login_ command; after signing in, CLI commands are run against your default subscription
     1. Run the _login_ command  
          ```azurecli-interactive
         az login
@@ -54,7 +59,7 @@ author: felucian,mcerreto
         az account list
         ```
 
-3. Create the resource group by executing the command  
+2. Create the resource group by executing the command  
     ```azurecli-interactive
     az group create -l westus -n MSReady19-Lab-RG
     ```
@@ -135,7 +140,7 @@ The AKS cluster and all the related resources will be deployed directly using th
 1. Execute the following command
 
     ```azurecli-interactive
-    az aks create -g "MSReady19-Lab-RG" -n "MSReady19-AI-APP-ST304-AKS" --node-count 1 --generate-ssh-keys --verbose
+    az aks create -g "MSReady19-Lab-RG" -n "MSReady19-AI-APP-ST304-AKS" --node-count 1 --generate-ssh-keys --kubernetes-version 1.9.11 --verbose
     ```
 
     that will automatically submit a deployment job in order to spin-up the AKS resource within the group previously created and then create the reserved resource group for all the components belonging to the managed Kubernetes infrastructure.

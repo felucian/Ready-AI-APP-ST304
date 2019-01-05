@@ -2,7 +2,7 @@
 
 ## 1. Clean-up existing BookService deployment
 
-1. Start a PowerShell session and remove existing _bookservice_ deployments and service trought _kubectl_ by executing the following commands:
+1. Using the PowerShell session alredy used for _kubectl_ remove existing _bookservice_ deployments and service trought _kubectl_ by executing the following commands:
 
     ```plain
     kubectl delete deployment bookservice ; kubectl delete service bookservice
@@ -47,7 +47,7 @@
 
    ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png)
 
-3. Wait a couple of minutes, needed for Azure Application Insights to collect telemetry, and paste the content of the "_LogAnalyticsQuery.md_" file into Azure Log Analytics. 
+3. Wait a couple of minutes, needed for Azure Application Insights to collect telemetry, and paste the content of the "_C:\Labs\Lab_Modules\k8sconfigurations\mirroring\LogAnalyticsQuery.md_" file into Azure Log Analytics. 
 
    ```plain
    requests
@@ -67,7 +67,7 @@
 
 **How does it work?**
 
-The front end reverse proxy, [Envoy](https://www.envoyproxy.io/), has a very useful configuration that allows to send traffic to a live cluster and a mirror cluster: the traffic is sent to the mirror cluster in a fire and forget way, which means that Envoy doesn't wait for an answer from the mirror cluster.  
+The front end reverse proxy, [Envoy](https://www.envoyproxy.io/), has a very useful configuration that allows to send traffic to a live cluster and a mirror cluster: the traffic is sent to the mirror cluster in a "fire and forget" mode, which means that Envoy doesn't wait for an answer from the mirror cluster.  
 You can find the mirror configuration in the file "_C:\Labs\src\Sidecars\default-sidecar.yaml_". Below an excerpt of file:
 
 ![image.png](imgs/image-0f5fe834-0adc-4018-8aeb-ab2296b303f1.png)
@@ -79,17 +79,17 @@ Then the configuration of two clusters is straightforward (note how the addresse
 
 ## 3. Introduce a performance decrease in the mirrored service
 
-1. From the same folder, we now rollout a new version of our mirrored bookservice, which introduces a delay while loading book reviews by executing the following command:  
+1. From the same folder, we're going to rollout a new version of our mirrored bookservice, which introduces a delay while loading book reviews by executing the following command:  
 
    ```powershell
-   kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V3-delays.yaml`
+   kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V3-delays.yaml
    ```
 
 2. At this point, let's browse again between book reviews from the web page or run the _poller.ps1_ as below:  
 
    ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png)
 
-3. Wait a couple of minutes, needed for Azure Application Insights to collect telemetry, and paste the content of the _LogAnalyticsQuery.md_ file into Azure Log Analytics.
+3. Wait a couple of minutes, needed for Azure Application Insights to collect telemetry, and paste the content of the _C:\Labs\Lab_Modules\k8sconfigurations\mirroring\LogAnalyticsQuery.md_ file into Azure Log Analytics.
 
    ```plain
    requests
