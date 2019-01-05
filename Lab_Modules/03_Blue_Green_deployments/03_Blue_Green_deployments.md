@@ -8,7 +8,7 @@ author: felucian,mcerreto
 
 ## 1. Clean-up existing BookService deployment
 
-1. Using the PowerShell session, remove existing _bookservice_ deployment and service trought _kubectl_ by executing the following commands:
+1. Using the PowerShell session, remove existing _bookservice_ deployment and service with _kubectl_ by executing the following commands:
 
     ```dos
     kubectl delete deployment bookservice ; kubectl delete service bookservice
@@ -21,7 +21,7 @@ author: felucian,mcerreto
     service "bookservice" deleted
     ```
 
-2. Wait few minutes then double check the results of the delete operation by executing:
+2. Wait few seconds and then double check the results of the delete operation by executing:
 
     ```dos
     kubectl get pod; kubectl get service
@@ -59,7 +59,7 @@ author: felucian,mcerreto
     kubectl get pod ; kubectl get service
     ```
 
-    that confirms the creation of the k8s clusterIP service and the two k8s pods _bookservice-1.0_ (our production environment - green) and _bookservice-1.1_ (our staging enviroment - blue)
+    that confirms the creation of the k8s service and the two k8s pods _bookservice-1.0_ (our production environment - green) and _bookservice-1.1_ (our staging enviroment - blue)
 
     ![alt text](imgs/mod_03_img_01.png "kubectl output")  
 
@@ -67,7 +67,7 @@ author: felucian,mcerreto
 
 ## 3. Generate HTTP requests vs the BookService API
 
-At this point we need to generate some HTTP traffic versus the BookService API using the _poller.ps1_ PowerShell script in order to highlight the effects of the blue \ green deployment strategy once we proceed to execute the swap between green and blue version
+At this point we need to generate some HTTP traffic versus the BookService API using the _poller.ps1_ PowerShell script; this will highlight the effects of the blue \ green deployment strategy once we proceed to execute the swap between green and blue version.
 
 1. Start a new PowerShell as admin and execute the following command to allow the execution of the _poller.ps1_ script
 
@@ -89,7 +89,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     The $publicIP variable will be used in the next step as an input parameter to the _poller.ps1_ script
 
-4. Run the _poller.ps1_ script that basically makes two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2), by executing:
+4. The _poller.ps1_ script will make two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2), by executing:
 
     ```powershell
     C:\Labs\Lab_Modules\Tools\Poller.ps1 -PublicIP $publicIP
@@ -103,9 +103,9 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     Don't terminate the script, so you can easily view the effects of the blue version deployment in the next steps.
 
-## 4. Switch the Live Environment to Blue (which contains a fault)
+## 4. Switch the Live Environment to **Blue** (which contains a fault)
 
-The blue version of the BookService API contains an exception raised while loading reviews for the BookId = 2 in order to simulate a fault in the codebase.
+The blue version of the BookService API contains an error in the application logic that will raise an exception when loading reviews for the BookId = 2 and BookId = 4, while it will work correctly for BookId = 1 and BookId = 3.
 
 1. Switch to the PowerShell session already used in the step 2 and then proceed to deploy the Blue version of the BookService API, by executing:
 
@@ -113,17 +113,17 @@ The blue version of the BookService API contains an exception raised while loadi
     kubectl apply -f C:\Labs\K8sconfigurations\blue-green\bookservice-blue-incident.yaml
     ```
 
-    As you can see below, while the _poller.ps1_ was continuing to receive HTTP 200 (OK status - the request has succeeded), as soon as the deployment procedure has been completed and then the _service/bookservice_ swapped from a cluster IP to another one, the script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected condition that prevented it from fulfilling the reques) as final status code, indicating a fault
+    As you can see below, while the _poller.ps1_ was continuing to receive HTTP 200 (OK status - the request has succeeded), as soon as the _service/bookservice_ is pointing to the blue environment, the script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected error) as final status code, indicating a failure
 
     ![alt text](imgs/mod_03_img_04.png "Poller execution")
 
-    So, it's quite easy to understand that Blue\Green deployment strategy is very useful to reduce\remove deployment downtime providing also, thanks to the k8s infrastructure, an easy rollback operation in terms of effort, but finally that cannot prevent to bring "broken" code on production environment causing a service outage for our final users.
+    So, it's quite easy to understand that Blue\Green deployment strategy is very useful to reduce\remove deployment downtime. Furthermore, thanks to the Kubernetes infrastructure, we can easily perform a rollback operation (we can't still prevent a bug to impact real users).
 
 ## 5. Rolling back to the healthy version (Green)
 
 Looking at the two deployment files _\k8sconfigurations\blue-green\bookservice-green-OK.yaml_ and _\k8sconfigurations\blue-green\_bookservice-blue-incident.yaml_ we could spot that the main difference, apart from the different Docker images of the containers and version tag label, is the *selector* of the service.
 
-K8s use selectors to basically bind a service, so in our case a Cluster IP, to a deployment.
+K8s use selectors to bind a service to a deployment.
 
 In our green deployment yaml file the service named _bookservice_ is defined as above:
 
@@ -155,9 +155,9 @@ spec:
     deployment: blue
 ```
 
-So, switching between the faulty and healthy version consists in changing the _deployment_ property value of the selector, replacing the _spec_ structure
+Switching between the faulty and healthy version consists in changing the _deployment_ property value of the selector, replacing the _spec_ structure
 
-You can achieve that step, trought _kubectl_, by executing the following commands:
+You can achieve that step with _kubectl_ by executing the following commands:
 
 1. Prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
 
