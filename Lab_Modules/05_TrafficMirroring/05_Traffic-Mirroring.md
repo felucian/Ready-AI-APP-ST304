@@ -2,7 +2,7 @@
 
 ## 1. Clean-up existing BookService deployment
 
-1. Using the PowerShell session alredy used for _kubectl_ remove existing _bookservice_ deployments and service trought _kubectl_ by executing the following commands:
+1. Using the PowerShell session alredy used for _kubectl_, remove the existing _bookservice_ deployments and service by executing the following commands:
 
     ```plain
     kubectl delete deployment bookservice ; kubectl delete service bookservice
@@ -43,7 +43,7 @@
 
    ![image.png](imgs/image-a8e9d79a-18bd-44ac-9cb0-f0ac028221a6.png)
 
-2. At this point both mirrored deployment (bookservicemirror) and user facing deployment (bookservice) are configured with the same image (readymirroring/bookservice). Now you can browse the web application or invoke the _poller.ps1_ script used in the previous modules.
+2. At this point both mirrored deployment (bookservicemirror) and user facing deployment (bookservice) are configured with the same docker image (readymirroring/bookservice). Now you can browse the web application or invoke the _poller.ps1_ script used in the previous modules.
 
    ![image.png](imgs/image-acc4a3b4-a429-4243-b5e0-3cb1c07850f8.png)
 
@@ -107,7 +107,7 @@ We have anticipated our first problem without impacting real users! You can see 
 
 ## 3. Introduce a fault in the mirrored service
 
-1. We're going to rollout a new version of our mirrored service, which introduces a fault while loading book reviews with and even Id. Type following command:  
+1. We're going to rollout a new version of our mirrored service, which introduces a fault while loading book reviews with BookId = 2 and BookId = 4 (the same fault we used for previous modules). Type following command:  
 
    ```powershell
    kubectl apply -f C:\Labs\k8sconfigurations\mirroring\bookservice-V4-fault.yaml

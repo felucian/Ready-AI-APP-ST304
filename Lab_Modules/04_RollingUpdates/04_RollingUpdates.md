@@ -22,7 +22,7 @@ author: felucian,mcerreto
     service "bookservice" deleted
     ```
 
-2. Wait few minutes and then double check the results of the delete operation by executing:
+2. Wait few seconds and then double check the results of the delete operation by executing:
 
     ```dos
     kubectl get pod; kubectl get service
@@ -65,7 +65,7 @@ author: felucian,mcerreto
 
 ## 3. Execute the Poller script
 
-1. Using the admin PowerShell session, run the _poller.ps1_ script or use the web application to get some traffic for the BookService API by executing:
+1. Using the PowerShell session, run the _poller.ps1_ script or use the web application to get some traffic for the BookService API by executing:
 
     ```powershell
     C:\Labs\Lab_Modules\Tools\Poller.ps1 -PublicIP $publicIP
@@ -77,7 +77,7 @@ author: felucian,mcerreto
 
 ## 4. Deploy BookService using Rolling Updates strategy
 
-1. While the _poller.ps1_ script is running, using the PowerShell reserved to _kubectl_ proceed to deploy the BookService API using the rolling updates strategy by executing
+1. While the _poller.ps1_ script is running, from the PowerShell session we used to run _kubectl_ commands, run the following command in order to proceed with the deployment of the BookService API with a rolling updates strategy
 
    ```dos
    kubectl apply -f C:\Labs\K8sConfigurations\rolling-updates\bookservice-V2-rolling-update.yaml
@@ -92,7 +92,7 @@ author: felucian,mcerreto
 
    The rolling update strategy we are using will create two pods with the new version and terminate two pods with the old version every 40 seconds. For more details check the file _C:\Labs\K8sConfigurations/rolling-updates/bookservice-V2-rolling-update.yaml_.
 
-2. Let's monitor the PowerShell session where _poller.ps1_ script is running, you'll start to see some fails for the  [BookId 2] HTTP call
+2. Let's monitor the PowerShell session where _poller.ps1_ script is running, you'll start to see some failures for the  [BookId 2] HTTP call
 
     ![alt text](imgs/mod_04_img_03.png "BookService RU deploy 1")
 
@@ -110,7 +110,7 @@ author: felucian,mcerreto
 
     ![alt text](imgs/mod_04_img_07.png "BookService RU deploy 3")
 
-    then we can see that number of failures will increase as the rolling update strategy upgrades all replicas to the new version
+    then we can see that number of failures will gradually increase as the rolling update strategy upgrades all replicas to the new version
 
     ![alt text](imgs/mod_04_img_04.png "BookService RU deploy 2")
 
