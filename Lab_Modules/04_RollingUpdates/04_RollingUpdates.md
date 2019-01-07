@@ -38,7 +38,7 @@ author: felucian,mcerreto
     kubernetes     ClusterIP      10.0.0.1     <none>           443/TCP        3d2h
     ```
 
-## 2. Deploy the BookService API
+## 2. Deploy the BookService
 
 1. Re-deploy the original BookService API by executing:
 
@@ -76,6 +76,7 @@ author: felucian,mcerreto
     ![alt text](imgs/mod_04_img_02.png "BookService 6 replicas")
 
 ## 4. Deploy BookService using Rolling Updates strategy
+We are now going to deploy a new version of the book service with a rolling update strategy; the new version will return an error when retrieving book reviews for BookId = 2 and BookId = 4.
 
 1. While the _poller.ps1_ script is running, from the PowerShell session we used to run _kubectl_ commands, run the following command in order to proceed with the deployment of the BookService API with a rolling updates strategy
 
@@ -105,12 +106,9 @@ author: felucian,mcerreto
     that allows you to easily follow the whole operation until all new replicas result updated and the old one terminated
 
     ![alt text](imgs/mod_04_img_08.png "BookService RU deploy 3")
+    _During the rollout, you may receive a few HTTP 503 (Service Unavailable) codes._
 
-    While the _poller.ps1_ script is making several calls, you may receive a few HTTP 503 (Service Unavailable) codes, which shows how short the downtime window is with rolling updates.
-
-    ![alt text](imgs/mod_04_img_07.png "BookService RU deploy 3")
-
-    then we can see that number of failures will gradually increase as the rolling update strategy upgrades all replicas to the new version
+    Then we can see that number of failures will gradually increase as the rolling update strategy upgrades all replicas to the new version
 
     ![alt text](imgs/mod_04_img_04.png "BookService RU deploy 2")
 

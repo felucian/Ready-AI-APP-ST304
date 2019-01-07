@@ -84,7 +84,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 3. Set the PowerShell $publicIP variable to the external IP reported by _kubectl_ in the previous step by executing, in that case:
 
     ```powershell
-    $publicIP = "104.42.174.161"
+    $publicIP = "<external-ip-of-bookinfospa-service>"
     ```
 
     The $publicIP variable will be used in the next step as an input parameter to the _poller.ps1_ script
