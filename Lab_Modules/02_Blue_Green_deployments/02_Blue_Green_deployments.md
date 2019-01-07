@@ -61,7 +61,7 @@ author: felucian,mcerreto
 
     that confirms the creation of the k8s service and the two k8s pods _bookservice-1.0_ (our production environment - green) and _bookservice-1.1_ (our staging enviroment - blue)
 
-    ![alt text](imgs/mod_03_img_01.png "kubectl output")  
+    ![alt text](imgs/mod_02_img_01.png "kubectl output")  
 
 3. Take note of the External-IP reported in the output, it will be used in the next step
 
@@ -77,7 +77,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     as the following screenshot
 
-    ![alt text](imgs/mod_03_img_02.png "Execution Policy")
+    ![alt text](imgs/mod_02_img_02.png "Execution Policy")
 
 2. Type "Yes" and then hit _Enter_ to confirm the operation
 
@@ -97,7 +97,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
 
     As you can see below  
 
-    ![alt text](imgs/mod_03_img_03.png "Poller execution")
+    ![alt text](imgs/mod_02_img_03.png "Poller execution")
 
     the script runs a loop that provides two requests each seconds until you terminates it using _Ctrl+C_ shortcut
 
@@ -115,7 +115,7 @@ The blue version of the BookService API contains an error in the application log
 
     As you can see below, while the _poller.ps1_ was continuing to receive HTTP 200 (OK status - the request has succeeded), as soon as the _service/bookservice_ is pointing to the blue environment, the script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected error) as final status code, indicating a failure
 
-    ![alt text](imgs/mod_03_img_04.png "Poller execution")
+    ![alt text](imgs/mod_02_img_04.png "Poller execution")
 
     So, it's quite easy to understand that Blue\Green deployment strategy is very useful to reduce\remove deployment downtime. Furthermore, thanks to the Kubernetes infrastructure, we can easily perform a rollback operation (we can't still prevent a bug to impact real users).
 
@@ -175,6 +175,6 @@ You can achieve that step with _kubectl_ by executing the following commands:
 
    As you can see in the following screenshot:
 
-   ![alt text](imgs/mod_03_img_05.png "Poller execution")
+   ![alt text](imgs/mod_02_img_05.png "Poller execution")
 
    as soon as k8s complete the patch operation, the BookService API started to send HTTP 200 (Status OK) for the request related to the BookId = 2.
