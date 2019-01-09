@@ -331,7 +331,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
     kubectl get service
     ```
 
-    that will return the following output:
+    that will return an output similar to the following:
 
     ```plain
     NAME          TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
