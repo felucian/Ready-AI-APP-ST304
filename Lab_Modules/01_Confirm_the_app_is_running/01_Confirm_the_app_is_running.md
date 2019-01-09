@@ -435,7 +435,7 @@ The secret key will be created within the cluster using the _kubectl_ CLI
 
     in order to retrieve info on requests with 200 result code handled in the last 24h;
 
-10. Click on _Run_ button, then you should see the results
+10. Wait a couple of minutes, needed for Azure Application Insights to collect telemetry, then click on _Run_ button, then you should see the results
 
     ![alt text](imgs/mod_01_img_10.png "Application Insights Query Results")  
     _(Please expect few differences in number between your query results and the above image)_
