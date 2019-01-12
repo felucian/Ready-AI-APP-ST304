@@ -52,10 +52,9 @@
      ```dos
     kubectl get deployment ; kubectl get service
     ```
- 
-    ![alt text](imgs/mod_02_img_01.png "kubectl output")  
-   Right now both environments, green (bookervice-v1.0) and blue (bookservice-2.0) are deployed, **but only one will receive live traffic**. In our case our the bookservice is configured to point to the green environment. 
 
+    ![alt text](imgs/mod_02_img_01.png "kubectl output")  
+   Right now both environments, green (bookervice-v1.0) and blue (bookservice-2.0) are deployed, **but only one will receive live traffic**. In our case, the bookservice is configured to aim to the green environment.  
 
 3. Take note of the External-IP reported in the output, it will be used in the next step
 
@@ -81,9 +80,9 @@ At this point we need to generate some HTTP traffic versus the BookService API u
     $publicIP = "<external-ip-of-bookinfospa-service>"
     ```
 
-    Replace _\<external-ip-of-bookinfospa-service>_ with the external ip of the bookinfo-spa service. 
+    replacing _\<external-ip-of-bookinfospa-service>_ with the external IP of the bookinfo-spa service as well.  
 
-4. The _poller.ps1_ script will make two requests on the BookService WebAPI, first calling the /reviews/1 (the reviews of the Book with ID 1) then the /review/2 endpoint (all the reviews of the Book with ID 2), by executing:
+4. The _poller.ps1_ script will make two requests on the BookService WebAPI, first calling the _/reviews/1_ (all the reviews of the Book with ID 1) then the _/review/2_ endpoint (all the reviews of the Book with ID 2), by executing:
 
     ```powershell
     C:\Labs\Lab_Modules\Tools\Poller.ps1 -PublicIP $publicIP
@@ -116,9 +115,9 @@ spec:
 
 The blue version of the BookService API contains an error in the application logic that will raise an exception when loading reviews for the BookId = 2 and BookId = 4, while it will work correctly for BookId = 1 and BookId = 3.
 
-In order to switch between the faulty and healthy version we just have to change the _deployment_ property value, replacing green with blue
+In order to switch between the faulty and healthy version we just have to change the _deployment_ property value, replacing green with blue.
 
-Execute the following commands:
+Execute the following commands to proceed:
 
 1. Prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
 
@@ -133,8 +132,8 @@ Execute the following commands:
    ```powershell
    kubectl patch service bookservice -p $specJson
    ```
-2. As you can see below, as soon as the _service/bookservice_ is pointing to the blue environment, the _poller.ps1_ script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected error) as final status code, indicating a failure 
 
+2. As you can see below, as soon as the _service/bookservice_ aimed to the blue environment, the _poller.ps1_ script started to receive HTTP 500 (Internal Server Error status - the server encountered an unexpected error) as final status code, indicating a failure  
 
     ![alt text](imgs/mod_02_img_04.png "Poller execution")
 
@@ -142,7 +141,7 @@ Execute the following commands:
 
 ## 5. Rolling back to the healthy version (Green)
 
-2. Having the two environments blue and green still living side by side, rolling back to the healthy version (green) is straightforward. 
+1. Having the two environments blue and green still up & running side by side, rolling back to the healthy version (green) is straightforward.  
 
    Prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
 
@@ -157,6 +156,7 @@ Execute the following commands:
    ```powershell
    kubectl patch service bookservice -p $specJson
    ```
+
     ![alt text](imgs/mod_02_img_05.png "Poller execution")
 
    as soon as k8s complete the patch operation, the BookService API started to send again HTTP 200 (Status OK) for the request related to the BookId = 2.
