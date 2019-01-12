@@ -23,7 +23,7 @@ author: felucian,mcerreto
 4. Clone the official lab Git repo by executing  
 
    ```powershell
-   git clone https://github.com/MikeCer/MSReady19-AI-APP-ST304.git
+   git clone https://github.com/felucian/Ready-AI-APP-ST304.git
    ```
 
 ## 2. Create a resource group

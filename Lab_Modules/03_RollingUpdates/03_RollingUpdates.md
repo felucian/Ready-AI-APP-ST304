@@ -11,14 +11,14 @@ author: felucian,mcerreto
 1. Using the PowerShell session alredy used for _kubectl_ remove existing _bookservice_ deployments and service by executing the following commands:
 
     ```plain
-    kubectl delete deployment bookservice-1.0 bookservice-1.1 ; kubectl delete service bookservice
+    kubectl delete deployment bookservice-1.0 bookservice-2.0 ; kubectl delete service bookservice
     ```
 
     that will return
 
     ```plain
     deployment.extensions "bookservice-1.0" deleted
-    deployment.extensions "bookservice-1.1" deleted
+    deployment.extensions "bookservice-2.0" deleted
     service "bookservice" deleted
     ```
 

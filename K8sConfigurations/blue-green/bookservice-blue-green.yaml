@@ -28,7 +28,7 @@ spec:
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: bookservice-1.1
+  name: bookservice-2.0
 spec:
   replicas: 1
   template:
@@ -61,4 +61,5 @@ spec:
   - port: 80
   selector:
     app: bookservice
-    deployment: blue
+    deployment: green
+  
