@@ -1,9 +1,3 @@
----
-title: AI-APP-ST304 - 04 - Rolling Updates Deployments
-description: Lab instructions to get an overview of Rolling Updates deployments strategy from a reliability point of view
-author: felucian,mcerreto
----
-
 # Rolling Updates deployment
 
 ## 1. Clean-up existing BookService deployment

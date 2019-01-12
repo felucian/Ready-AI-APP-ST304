@@ -1,9 +1,3 @@
----
-title: AI-APP-ST304 - 03 - Blue \ Green Deployments
-description: Lab instructions to get an overview of Blue \ Green deployments strategy from a reliability point of view
-author: felucian,mcerreto
----
-
 # Blue/Green Deployments
 
 ## 1. Clean-up existing BookService deployment

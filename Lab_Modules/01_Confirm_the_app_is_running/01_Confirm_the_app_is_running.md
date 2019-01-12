@@ -1,8 +1,3 @@
----
-title: AI-APP-ST304 - 01 - Lab Setup - Confirm the app is running
-description: Lab instructions for resource provisioning of the MSReady 19 AI-APP-ST304 technical lab session
-author: felucian,mcerreto
----
 # Lab Setup - Confirm the app is running
 
 ## 1. Clone the AI-APP-ST304 Lab Git repo
