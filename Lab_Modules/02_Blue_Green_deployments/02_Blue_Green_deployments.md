@@ -80,7 +80,7 @@ At this point we need to generate some HTTP traffic versus the BookService API u
     $publicIP = "<external-ip-of-bookinfospa-service>"
     ```
 
-    replacing _\<external-ip-of-bookinfospa-service>_ with the external IP of the bookinfo-spa service as well.  
+    replacing _\<external-ip-of-bookinfospa-service>_ with the external IP of your bookinfo-spa service as well.  
 
 4. The _poller.ps1_ script will make two requests on the BookService WebAPI, first calling the _/reviews/1_ (all the reviews of the Book with ID 1) then the _/review/2_ endpoint (all the reviews of the Book with ID 2), by executing:
 
@@ -117,7 +117,7 @@ The blue version of the BookService API contains an error in the application log
 
 In order to switch between the faulty and healthy version we just have to change the _deployment_ property value, replacing green with blue.
 
-Execute the following commands to proceed:
+Keep the two powershell sessions side by side and execute the following commands to proceed:
 
 1. Prepare the new $_spec_ and $_specJson_ variables by executing the following two commands:
 
